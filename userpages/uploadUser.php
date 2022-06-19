@@ -1,4 +1,5 @@
 <?php
+
 // Database form
 $email = $_POST['addEmail'];
 $voornaam = $_POST['addName'];
@@ -16,6 +17,6 @@ $statement->bind_param('ssssssss',$email, $voornaam ,$tussenvoegsel, $achternaam
 $statement->execute() or die('Error inserting image in database (kenteken might be in use)');
 $statement->close();
 
-header('Location: ../userpages/reservation.php');
+header('Location: uploadRental.php');
 ?>
 

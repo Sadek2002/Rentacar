@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="../adminpages/style.css">
     <title>Main Page</title>
 </head>
+<?php
+// Connection creation
+$mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
+?>
 <header>
     <div class="headerWrapper">
         <img class="logo" src="../image/logo.png">
@@ -33,7 +37,7 @@
     </div>
 
     <div class="whiteBox">
-        <form method="post" action="carSelection.php" enctype="multipart/form-data">
+        <form method="post" action="uploadRentaltime.php" enctype="multipart/form-data">
             <label class="boxTitle">Auto toevoegen</label>
 
             <br>
@@ -48,25 +52,25 @@
             <br>
 
             <div class="kenteken">
-                <label for="addKenteken">Ophaal datum:</label><br>
-                <input type="date" id="kenteken" name="addKenteken"><br>
+                <label for="addOphaaldatum">Ophaal datum:</label><br>
+                <input type="date" id="kenteken" name="addOphaaldatum"><br>
             </div>
 
             <div class="carImage">
-                <label for="image">Ophaaltijd:</label><br>
-                <input type="time" id="kenteken" name="image" accept="image/*">
+                <label for="addOphaaltijd">Ophaaltijd:</label><br>
+                <input type="time" id="kenteken" name="addOphaaltijd">
             </div>
 
             <br>
 
             <div class="kenteken">
-                <label for="addKenteken">Retourdatum:</label><br>
-                <input type="date" id="kenteken" name="addKenteken"><br>
+                <label for="addRetourdatum">Retourdatum:</label><br>
+                <input type="date" id="kenteken" name="addRetourdatum"><br>
             </div>
 
             <div class="carImage">
                 <label for="image">Retourtijd:</label><br>
-                <input type="time" id="kenteken" name="addKenteken"><br>
+                <input type="time" id="kenteken" name="addRetourtijd"><br>
             </div>
 
             <button class="addButton">Toevoegen</button>
