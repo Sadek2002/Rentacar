@@ -327,7 +327,7 @@ a.deleteButton {
 .whiteBox {
     color: black;
     width: 90%;
-    margin: 0 5% 0 5%;
+    margin: 20px 5% 0 5%;
     color: white;
     box-shadow: 0 0 7px 1px darkgray;
 }

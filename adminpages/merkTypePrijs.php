@@ -45,9 +45,7 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
                     <label for="addBrand">Auto merk:</label><br>
                     <input type="text" id="addBrand" name="addBrand" required><br>
                 </div>
-        </div>
 
-        <div class="whiteBox">
             <label class="boxTitle">Auto type toevoegen</label>
 
             <br>
@@ -56,9 +54,7 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
                 <label for="addType">Auto type:</label><br>
                 <input type="text" id="addBrand" name="addType" required><br>
             </div>
-        </div>
 
-        <div class="whiteBox">
             <label class="boxTitle">Auto prijs:</label>
 
             <br>
@@ -67,7 +63,6 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
                 <label for="addPrice">Auto prijs:</label><br>
                 <input type="text" id="addBrand" name="addPrice" required><br>
             </div>
-        </div>
 
         <button class="addButton">Toevoegen</button>
         </form>

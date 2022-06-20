@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 // Database form
 $email = $_POST['addEmail'];
@@ -11,12 +12,28 @@ $postcode = $_POST['addPostalcode'];
 $plaats = $_POST['addStreet'];
 
 $mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
-$query = "INSERT INTO klant VALUES (0,?,?,?,?,?,?,?,?)";
-$statement = $mysqli->prepare($query) or die("Error preparing");
-$statement->bind_param('ssssssss',$email, $voornaam ,$tussenvoegsel, $achternaam, $geboortedatum, $adres, $postcode, $plaats) or die('Error binding params');
-$statement->execute() or die('Error inserting image in database (kenteken might be in use)');
-$statement->close();
 
-header('Location: uploadRental.php');
+$mysqli->autocommit(FALSE);
+
+$query = $mysqli->prepare("INSERT INTO klant VALUES (0,?,?,?,?,?,?,?,?)");
+$query2 = $mysqli->prepare("SELECT LAST_INSERT_ID()");
+
+$query->bind_param('ssssssss',$email, $voornaam ,$tussenvoegsel, $achternaam, $geboortedatum, $adres, $postcode, $plaats) or die('Error binding params');
+$query->execute() or die('Error executing');
+$query2->execute() or die('Error executing');
+$query2->store_result();
+$query2->bind_result($result);
+$mysqli->autocommit(TRUE);
+
+while ($query2->fetch()) {
+    echo $result;
+}
+
+$query2->free_result();
+$query2->close();
+
+$_SESSION['klant'] = $result;
+
+header('Location: uploadUserID.php');
 ?>
 

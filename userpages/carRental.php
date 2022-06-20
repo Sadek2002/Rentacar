@@ -9,12 +9,13 @@
     <title>Car Rental</title>
 </head>
 <?php
+session_start();
 // Connection creation
 $mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
-$id = $_GET['id'];
+$kenteken = $_SESSION['kenteken'];
 
 // Select Data
-$query = "SELECT * FROM auto INNER JOIN merktype ON merktype_id = id WHERE kenteken= '$id'";
+$query = "SELECT * FROM reservering INNER JOIN auto ON reservering.auto_id = auto.kenteken INNER JOIN merktype ON auto.merktype_id = merktype.id WHERE auto_id = '$kenteken'";
 $result = mysqli_query($mysqli, $query) or die("Error with query");
 ?>
 <body>
@@ -35,10 +36,9 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
         </ul>
     </div>
 
-<!--Display car data-->
+    <!--Display car data-->
     <?php
-    while ($row = mysqli_fetch_array($result)) {
-        $kenteken = $row['kenteken'];
+    while ($row = mysqli_fetch_assoc($result)) {
         $foto = $row['foto'];
         $brandstof = $row['brandstof'];
         $kleur = $row['kleur'];
@@ -119,7 +119,6 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
             <div class="carUserDataBox">
                 <label for="addKenteken">Postcode</label><br>
                 <input type="text" id="kenteken" name="addPostalcode" required><br>
-                <input type="hidden" name="kenteken" value="'.  $kenteken .'">
             </div>
             <button class="addButton">Toevoegen</button>
             </form>
