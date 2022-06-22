@@ -194,6 +194,8 @@ select#selectionType {
 }
 
 .addButton {
+    text-align: center;
+    display: block;
     font-weight: bold;
     color: white;
     background-color: lightgreen;
@@ -447,4 +449,54 @@ a.deleteButton {
     padding: 10px;
     font-size: 18px;
     margin: 20px 10% 20px 10%;
+}
+
+/*Reservation mail CSS*/
+.tableReservation {
+    background: gray;
+    border: 1px black solid;
+    width: auto;
+}
+
+.th_reservation {
+    height: 40px;
+    color: white
+}
+
+.td_row {
+    width: 10%;
+    text-align: center;
+    background-color: white;
+}
+
+.td_row2 {
+    width: 30%;
+    text-align: center;
+    background-color: white;
+}
+
+.td_row3 {
+    width: 10%;
+    text-align: center;
+    background-color: white;
+}
+
+.td_row_gray {
+    background-color: gray;
+}
+
+/*Edit PHP CSS*/
+.imageCarEdit {
+    display: block;
+    width: 100%;
+}
+
+.carImageEdit {
+    font-size: 18px;
+    display: block;
+    width: 30%;
+    margin: 20px 5% 0 0;
+    padding: 7px 0 0 7px;
+    border: 1px solid black;
+    float: right;
 }

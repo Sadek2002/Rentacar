@@ -12,10 +12,22 @@
 session_start();
 // Connection creation
 $mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
+
+$reservation_id = $_SESSION['name'];
+echo $reservation_id;
+
 $kenteken = $_SESSION['kenteken'];
 
 // Select Data
-$query = "SELECT * FROM reservering INNER JOIN auto ON reservering.auto_id = auto.kenteken INNER JOIN merktype ON auto.merktype_id = merktype.id WHERE auto_id = '$kenteken'";
+$query = "
+SELECT * FROM reservering 
+INNER JOIN auto 
+	ON reservering.auto_id = auto.kenteken 
+INNER JOIN merktype 
+	ON auto.merktype_id = merktype.id  
+WHERE reservering.auto_id = '$kenteken'
+	";
+
 $result = mysqli_query($mysqli, $query) or die("Error with query");
 ?>
 <body>
@@ -45,6 +57,21 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
         $merk = $row['merk'];
         $type = $row['type'];
         $prijs = $row['prijs'];
+        $ophaaldatum = $row['ophaaldatum'];
+        $ophaaltijd = $row['ophaaltijd'];
+        $retourdatum = $row['retourdatum'];
+        $retourtijd = $row['retourtijd'];
+
+        // Get total days
+        $datetime1 = date_create($ophaaldatum);
+        $datetime2 = date_create($retourdatum);
+
+        $interval = $datetime1->diff($datetime2);
+
+        // Get price
+        $totaal = $prijs * $interval->days;
+        $btw = $prijs * $interval->days / 100 * 21;
+        $totaal_btw = $totaal + $btw;
 
         echo '
             <div class="whiteBoxImage">
@@ -56,11 +83,11 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
                 <p class="carData">Brandstof: ' . $brandstof . '</p><br>
                 <p class="carData">Kleur: ' . $kleur . '</p><br>
                 <p class="carData">Prijs per dag: $' . $prijs . '</p><br>
-                <p class="carData">Ophaaldatum: 10/07/2022 Ophaaltijd: 15:30</p><br>
-                <p class="carData">Retourdatum: 15/07/2022 Retourtijd: 15:30</p><br><br>
+                <p class="carData">Ophaaldatum: '. $ophaaldatum .' Ophaaltijd: '. $ophaaltijd .'</p><br>
+                <p class="carData">Retourdatum: ' . $retourdatum .' Retourtijd: '. $retourtijd .'</p><br><br>
                 <p class="carData"><b>Totale bedrag:</b></p><br>
-                <p class="carData">Totale huur periode: 5 dagen</p><br>
-                <p class="carData" style="padding-bottom: 10px">Bedrag: €615</p><br>
+                <p class="carData">Totale huur periode: '. $interval->days .'</p><br>
+                <p class="carData" style="padding-bottom: 10px">Bedrag inclusief btw: €'. $totaal_btw .'</p><br>
             </div>
             
             <div class="whiteBoxImage">

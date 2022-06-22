@@ -68,7 +68,7 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
 <td>' . $kleur . '</td>' .
                     '
 
-                <td><a class="editButton" href="index.php?id=' .$kenteken . '">Edit</a></td>
+                <td><a class="editButton" href="editCar.php?id=' .$kenteken . '">Edit</a></td>
                 <td><a class="deleteButton" href="deleteCar.php?id=' .$kenteken. '">Delete</a></td>
                   </tr>';
             }

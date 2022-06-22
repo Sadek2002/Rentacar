@@ -1,85 +1,65 @@
 <?php
-    session_start();
+$mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
 
-    // Get id
-    $kenteken = $_SESSION['kenteken'];
-    $klant_id = $_SESSION['klant'];
+$id = $_GET['id'];
 
-    // Connection
-    $mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
-
-    // Get data
-    $query = "
-SELECT * FROM reservering 
+$query = "SELECT * FROM reservering 
 INNER JOIN auto 
 	ON reservering.auto_id = auto.kenteken 
 INNER JOIN merktype 
 	ON auto.merktype_id = merktype.id  
 INNER JOIN klant 
 	ON klant.klant_id = reservering.klant_id
-WHERE reservering.klant_id = $klant_id";
+WHERE reservering.klant_id = '$id'
+    ";
 
-    $result = mysqli_query($mysqli, $query) or die("Error with query");
+$result = mysqli_query($mysqli, $query) or die("Error with query");
+?>
+<?php
+// Get data
+while ($row = mysqli_fetch_array($result)) {
+    $reservering_id = $row['reservering_id'];
+    $foto = $row['foto'];
+    $kenteken = $row['kenteken'];
+    $brandstof = $row['brandstof'];
+    $merk = $row['merk'];
+    $type = $row['type'];
+    $prijs = $row['prijs'];
 
-    // Input data
-    while ($row = mysqli_fetch_assoc($result)) {
-        $brandstof = $row['brandstof'];
-        $merk = $row['merk'];
-        $type = $row['type'];
-        $prijs = $row['prijs'];
-        $ophaaldatum = $row['ophaaldatum'];
-        $ophaaltijd = $row['ophaaltijd'];
-        $retourdatum = $row['retourdatum'];
-        $retourtijd = $row['retourtijd'];
-        $reservering_id = $row['reservering_id'];
-        $getEmail = $row['email'];
+// Get total days
+    $ophaaldatum = $row['ophaaldatum'];
+    $retourdatum = $row['retourdatum'];
+    $datetime1 = date_create($ophaaldatum);
+    $datetime2 = date_create($retourdatum);
 
-        // Get total days
-        $datetime1 = date_create($ophaaldatum);
-        $datetime2 = date_create($retourdatum);
+    $interval = $datetime1->diff($datetime2);
 
-        $interval = $datetime1->diff($datetime2);
+    // Get today's date
+    $date_now = date("d/m/Y");
 
-        // Get today's date
-        $date_now = date("d/m/Y");
+// Get total price with tax
+    $totaal = $prijs;
+    $btw = $prijs * $interval->days / 100 * 21;
+    $totaal_btw = $prijs + $btw;
+}
+    ?>
 
-
-        // Get price
-        $totaal = $prijs * $interval->days;
-        $btw = $prijs * $interval->days / 100 * 21;
-        $totaal_btw = $totaal + $btw;
-        $btw = $prijs * $interval->days / 100 * 21;
-    }
-
-      // Create the basic email info to send
-    $email_to = "$getEmail";
-    $subject = "Betreft: Factuur Rent a Car";
-
-    // Create the email headers
-    $headers = "From: Rent a Car <salmousawi@roc-dev.com>\r\n";
-    $headers .= "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-
-    // Create the html message
-    $message =
-    "
-<html>
-<body>
-    <div>
+    <?=
+    "<div>
         <h1>Factuur</h1>
         <img src='https://i.imgur.com/71kLQIZ.png' style='width: 100px; float: right;'/>
         <p>Rent-a-Car</p>
         <p>Meerstraat 13</p>
         <p>1334 HK Almere</p>
         <p>Telefoon: (036)-39224932</p>
-        
+
         <br>
-        
-        <p>Datum: $date_now</p>
+
+        <p>Datum: <?php '.$date_now.' ?></p>
         <p>Factuurnummer: #$reservering_id</p>
-        
+
         <br>
-        
+
         <h1>Reserveringen</h1>
 
     <table style='background: gray; border: 1px black solid; width: 100%;'>
@@ -124,15 +104,5 @@ WHERE reservering.klant_id = $klant_id";
             <td style='width: 15%; background-color: white'>&euro;$totaal_btw</td>
         </tr>
     </table>
-    </div>
-</body>
-</html>
-";
-
-    // Send email to the user
-    if (mail($email_to, $subject, $message, $headers)) {
-        echo "Vacature is gestuurd naar uw email";
-    } else {
-        "Not sent";
-    }
+    </div>"
 ?>

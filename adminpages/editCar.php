@@ -10,11 +10,26 @@
     <title>Admin Home</title>
 </head>
 <?php
+session_start();
+
+// DB connection
 $mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
+
+// Get ID
 $id = $_GET['id'];
+$_SESSION['id'] = $id;
+
 // Select Data
-$query = "SELECT * from auto WHERE kenteken = '$id'";
+$query = "SELECT a.*, mt.* FROM auto AS a
+         INNER JOIN merktype as mt
+         ON a.merktype_id = mt.id 
+         WHERE kenteken = '$id'";
 $result = mysqli_query($mysqli, $query) or die("Error with query");
+
+$query2 = "SELECT * FROM merktype";
+$result2 = mysqli_query($mysqli, $query2) or die("Error with query");
+
+
 ?>
 <body>
 <header>
@@ -37,7 +52,15 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
     </div>
 
     <?php
-        echo '<div class="whiteBox">
+         while ($row = mysqli_fetch_array($result)) {
+             $merk = $row['merk'];
+             $type = $row['type'];
+             $prijs = $row['prijs'];
+             $foto = $row['foto'];
+             $kleur = $row['kleur'];
+             $fuel = $row['brandstof'];
+
+             echo '<div class="whiteBox">
         <form method="post" action="pushEdit.php" enctype="multipart/form-data">
             <label class="boxTitle">Auto toevoegen</label>
 
@@ -45,33 +68,48 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
 
             <div class="kenteken">
                 <label for="addKenteken">Auto kenteken:</label><br>
-                <input type="text" id="kenteken" name="addKenteken" required value=$id><br>
+                <input type="text" id="kenteken" name="editKenteken" required value=' . $id . '><br>
             </div>
 
-            <div class="carImage">
+            <div class="carImageEdit">
                 <label for="image">Auto foto:</label><br>
-                <input type="file" id="image" name="image" accept="image/*">
+                <img class= "imageCarEdit" src="' . $foto . '"/>
+                <a href="changeImage.php" class="addButton">Change Image</a>
             </div>
 
             <br>
 
-            <div class="fullWidthBox">
+            <div class="kenteken">
                 <label for="addColor">Auto brandstof:</label><br>
-                <input type="text" id="kenteken" name="addFuel" required value=><br>
+                <input type="text" id="kenteken" name="editFuel" required value=' . $fuel . '><br>
             </div>
 
             <br>
 
-            <div class="fullWidthBox">
+            <div class="kenteken">
                 <label for="addFuel">Auto kleur:</label><br>
-                <input type="text" id="kenteken" name="addColor" required><br>
+                <input type="text" id="kenteken" name="editColor" required value=' . $kleur . '><br>
             </div>
-            <td><a class="addButton" href="pushEdit.php?id=' .$id . '">Edit</a></td>
+          
+              <div class="kenteken">
+                <label for="name">Model naam:</label><br>
+                <select name="editMerkType" id="selectionType">
+                ';}
+                while ($row = mysqli_fetch_array($result2)) {
+                    $id = $row['id'];
+                    $merk = $row['merk'];
+                    $type = $row['type'];
+                    $prijs = $row['prijs'];
+                    echo '<option value="'.$id.'">' . "Merk: " . $merk . " | " . "Type: " . $type . " | " . "Prijs: " . $prijs . '</option>';
+                    }
+                    echo '
+                    </select>
+            </div>
+            <td><button class="addButton" type="submit" name="submit">Submit</button></td>
         </form>
-    </div>';
-    ?>
-
-
+    </div>
 </header>
 </body>
 </html>
+';
+?>

@@ -6,7 +6,6 @@ $retourtijd = "12:00";
 $auto_id = $_POST['kenteken'];
 $klant_id = "2";
 
-
 $mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
 $query = "INSERT INTO reservering VALUES (0,?,?,?,?,?,?)";
 $statement = $mysqli->prepare($query) or die("Error preparing");
