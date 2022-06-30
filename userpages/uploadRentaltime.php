@@ -6,6 +6,9 @@ $ophaaltijd = $_POST['addOphaaltijd'];
 $retourdatum = $_POST['addRetourdatum'];
 $retourtijd = $_POST['addRetourtijd'];
 
+$_SESSION['ophaaldatum'] = $ophaaldatum;
+$_SESSION['retourdatum'] = $retourdatum;
+
 $mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
 
 $mysqli->autocommit(FALSE);

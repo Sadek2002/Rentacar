@@ -9,12 +9,16 @@
     <title>Reserveringen</title>
 </head>
 <?php
+session_start();
+
 // Connection creation
-$mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
+include_once "../includes/db_connection.php";
 
 // Select Data
 $query = "
 SELECT * FROM reservering 
+INNER JOIN klant
+    on reservering.klant_id = klant.klant_id
 INNER JOIN auto
 	on auto_id = kenteken
 INNER JOIN merktype 
@@ -22,7 +26,7 @@ INNER JOIN merktype
 ORDER BY reservering_id DESC
 	";
 
-$result = mysqli_query($mysqli, $query) or die("Error with query");
+$result = mysqli_query($conn, $query) or die("Error with query");
 ?>
 <body>
 <header>
@@ -45,26 +49,36 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
     <!--item table-->
     <table>
         <tr>
-            <th>Reservering nummer</th>
+            <th>Factuur nummer</th>
             <th>Car image</th>
             <th>Auto kenteken</th>
-            <th>Brandstof</th>
-            <th>Merk</th>
-            <th>Type</th>
+            <th>E-mail</th>
+            <th>Voornaam</th>
+            <th>Tussenvoegsel(s)</th>
+            <th>Achternaam</th>
             <th>Prijs per dag</th>
             <th>Totale dagen</th>
             <th>Totale prijs</th>
             <th>View</th>
             <th>Delete</th>
             <?php
+
             while ($row = mysqli_fetch_array($result)) {
+                // Get factuur number
                 $reservering_id = $row['reservering_id'];
-                $foto = $row['foto'];
+
+                // Get car data
                 $kenteken = $row['kenteken'];
-                $brandstof = $row['brandstof'];
-                $merk = $row['merk'];
-                $type = $row['type'];
+                $foto = $row['foto'];
                 $prijs = $row['prijs'];
+
+                // Get customer data
+                $email = $row['email'];
+                $voornaam = $row['voornaam'];
+                $tussenvoegsel = $row['tussenvoegsel'];
+                $achternaam = $row['achternaam'];
+
+                $useremail = $_SESSION['email'] = $email;
 
                 // Get total days
                 $ophaaldatum = $row['ophaaldatum'];
@@ -74,27 +88,31 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
 
                 $interval = $datetime1->diff($datetime2);
 
-                // Get total price with tax
-                $totaal = $prijs;
-                $btw = $prijs * $interval->days / 100 * 21;
-                $totaal_btw = $prijs + $btw ;
+                $totaldays = $interval->days + 1;
+
+                // Get price
+                $totaal = $prijs * $totaldays;
+                $btw = $prijs * $totaldays / 100 * 21;
+                $totaal_btw = $totaal + $btw;
+                $btw = $prijs * $totaldays / 100 * 21;
 
                 echo '<tr>
-                <td>' . $reservering_id . '</td>
+                <td>#' . $reservering_id . '</td>
                 <td><img class= "image" src="' . $foto . '"/></td>
                 <td>' . $kenteken . '</td>
-                <td>' . $brandstof . '</td>
-                <td>' . $merk . '</td>
-                <td>' . $type . '</td>
+                 <td>' . $email . '</td>
+                <td>' . $voornaam . '</td>
+                <td>' . $tussenvoegsel . '</td>
+                <td>' . $achternaam . '</td>
                 <td>' . "$" . $prijs . '</td>
-                <td>' . $interval->days . '</td>
+                <td>' . $totaldays . '</td>
                 <td>' . "$" . $totaal_btw . '</td>' .
                     '
 
-                <td><a class="editButton" href="viewReservering.php?id=' . $reservering_id . '">View</a></td>
+                <td><a class="editButton" href="viewReservering.php?id=' . $useremail . '">View</a></td>
                 <td><a class="deleteButton" href="deleteReservering.php?id=' . $reservering_id . '">Delete</a></td>
-                  </tr>';
-            }
+                  </tr>
+            ';}
             ?>
         </tr>
     </table>

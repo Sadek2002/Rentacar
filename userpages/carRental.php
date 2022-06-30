@@ -10,8 +10,9 @@
 </head>
 <?php
 session_start();
+
 // Connection creation
-$mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
+include_once "../includes/db_connection.php";
 
 $reservation_id = $_SESSION['name'];
 echo $reservation_id;
@@ -25,10 +26,10 @@ INNER JOIN auto
 	ON reservering.auto_id = auto.kenteken 
 INNER JOIN merktype 
 	ON auto.merktype_id = merktype.id  
-WHERE reservering.auto_id = '$kenteken'
+WHERE reservering.reservering_id = '$reservation_id'
 	";
 
-$result = mysqli_query($mysqli, $query) or die("Error with query");
+$result = mysqli_query($conn, $query) or die("Error with query");
 ?>
 <body>
 <header>
@@ -42,7 +43,7 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
     <div class="navBar">
         <ul class="dropDown">
             <li><a class="active" href="index.php">Auto huren</a></li>
-            <li><a href="">Auto aanbod</a></li>
+            <li><a href="autoAanbod.php">Auto aanbod</a></li>
             <li><a href="">Contact</a></li>
             <li><a href="">Veel gestelde vragen</a></li>
         </ul>

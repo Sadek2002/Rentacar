@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-// Connect with DB
-$mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
+// Connection creation
+include_once "../includes/db_connection.php";
 
 // Set image in carimages folder
 $temp_location = $_FILES['image']['tmp_name'];
@@ -15,7 +15,7 @@ if (isset($_POST['submit'])) {
     $id = $_SESSION['id'];
 
     $query = "UPDATE auto SET foto = (?) WHERE kenteken = '$id'";
-    $statement = $mysqli->prepare($query) or die("Error preparing");
+    $statement = $conn->prepare($query) or die("Error preparing");
     $statement->bind_param('s', $target_location) or die('Error binding params');
     $statement->execute() or die('Error inserting image in database (kenteken might be in use)');
     $statement->close();

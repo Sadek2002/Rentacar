@@ -10,11 +10,11 @@
 </head>
 <?php
 // Connection creation
-$mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
+include_once "../includes/db_connection.php";
 
 // Select Data
 $query = "SELECT id, merk, type, prijs FROM merktype";
-$result = mysqli_query($mysqli, $query) or die("Error with query");
+$result = mysqli_query($conn, $query) or die("Error with query");
 ?>
 <body>
 <header>

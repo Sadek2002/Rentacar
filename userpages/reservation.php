@@ -2,11 +2,12 @@
     session_start();
 
     // Get id
-    $kenteken = $_SESSION['kenteken'];
     $klant_id = $_SESSION['klant'];
 
-    // Connection
-    $mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
+    $email = $_SESSION['email'];
+
+    // Connection creation
+    include_once "../includes/db_connection.php";
 
     // Get data
     $query = "
@@ -17,42 +18,14 @@ INNER JOIN merktype
 	ON auto.merktype_id = merktype.id  
 INNER JOIN klant 
 	ON klant.klant_id = reservering.klant_id
-WHERE reservering.klant_id = $klant_id";
+WHERE klant.email = '$email'";
 
-    $result = mysqli_query($mysqli, $query) or die("Error with query");
+    $result = mysqli_query($conn, $query) or die("Error with query");
 
-    // Input data
-    while ($row = mysqli_fetch_assoc($result)) {
-        $brandstof = $row['brandstof'];
-        $merk = $row['merk'];
-        $type = $row['type'];
-        $prijs = $row['prijs'];
-        $ophaaldatum = $row['ophaaldatum'];
-        $ophaaltijd = $row['ophaaltijd'];
-        $retourdatum = $row['retourdatum'];
-        $retourtijd = $row['retourtijd'];
-        $reservering_id = $row['reservering_id'];
-        $getEmail = $row['email'];
+    $date_now = date("d/m/Y");
 
-        // Get total days
-        $datetime1 = date_create($ophaaldatum);
-        $datetime2 = date_create($retourdatum);
-
-        $interval = $datetime1->diff($datetime2);
-
-        // Get today's date
-        $date_now = date("d/m/Y");
-
-
-        // Get price
-        $totaal = $prijs * $interval->days;
-        $btw = $prijs * $interval->days / 100 * 21;
-        $totaal_btw = $totaal + $btw;
-        $btw = $prijs * $interval->days / 100 * 21;
-    }
-
-      // Create the basic email info to send
-    $email_to = "$getEmail";
+    // Create the basic email info to send
+    $email_to = "$email";
     $subject = "Betreft: Factuur Rent a Car";
 
     // Create the email headers
@@ -76,7 +49,14 @@ WHERE reservering.klant_id = $klant_id";
         <br>
         
         <p>Datum: $date_now</p>
-        <p>Factuurnummer: #$reservering_id</p>
+        <p>Factuurnummer: #</p>
+        
+        <br>
+        
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
         
         <br>
         
@@ -93,6 +73,38 @@ WHERE reservering.klant_id = $klant_id";
             <th style='height: 40px; color: white'>Totale dagen</th>
             <th style='height: 40px; color: white'>Totaal</th>
         </tr>
+        ";
+
+// Input data
+        while ($row = mysqli_fetch_assoc($result)) {
+        $kenteken = $row['kenteken'];
+        $brandstof = $row['brandstof'];
+        $merk = $row['merk'];
+        $type = $row['type'];
+        $prijs = $row['prijs'];
+        $ophaaldatum = $row['ophaaldatum'];
+        $ophaaltijd = $row['ophaaltijd'];
+        $retourdatum = $row['retourdatum'];
+        $retourtijd = $row['retourtijd'];
+        $reservering_id = $row['reservering_id'];
+        $getEmail = $row['email'];
+
+        // Get total days
+        $datetime1 = date_create($ophaaldatum);
+        $datetime2 = date_create($retourdatum);
+
+        $interval = $datetime1->diff($datetime2);
+        $totaldays = $interval->days + 1;
+
+        // Get today's date
+        $date_now = date("d/m/Y");
+
+        // Get price
+        $totaal = $prijs * $totaldays;
+        $btw = $prijs * $totaldays / 100 * 21;
+
+        $message .=
+            "
         <tr>
             <td style='width: 10%; text-align: center; background-color: white'>$kenteken</td>
             <td style='width: 10%; text-align: center; background-color: white'>$merk</td>
@@ -100,9 +112,16 @@ WHERE reservering.klant_id = $klant_id";
             <td style='width: 10%; text-align: center; background-color: white'>$brandstof</td>
             <td style='width: 27%; text-align: center; background-color: white'>Ophaaldatum: $ophaaldatum Ophaaltijd: $ophaaltijd<br>Retoudatum: $retourdatum Retourtijd: $retourtijd</td>
             <td style='width: 10%; text-align: center; background-color: white'>&euro;$prijs</td>
-            <td style='width: 13%; text-align: center; background-color: white'>$interval->days</td>
+            <td style='width: 13%; text-align: center; background-color: white'>$totaldays</td>
             <td style='width: 10%; background-color: white'>&euro;$totaal</td>
         </tr>
+        ";}
+
+        $btw = $prijs * $totaldays / 100 * 21;
+        $totaal_btw = $prijs + $btw;
+
+$message .=
+    "
         <tr>
             <td style='width: 15%; text-align: center; background-color: gray'></td>
             <td style='width: 15%; text-align: center; background-color: gray'></td>
@@ -111,7 +130,7 @@ WHERE reservering.klant_id = $klant_id";
             <td style='width: 15%; text-align: center; background-color: gray'></td>
             <td style='width: 15%; text-align: center; background-color: gray'></td>
             <td style='width: 15%; text-align: center; background-color: white'>BTW</td>
-            <td style='width: 15%; background-color: white'>&euro;$btw</td>
+            <td style='width: 15%; background-color: white'>[WIP] &euro;$btw</td>
         </tr>
          <tr>
             <td style='width: 15%; text-align: center; background-color: gray'></td>
@@ -121,7 +140,7 @@ WHERE reservering.klant_id = $klant_id";
             <td style='width: 15%; text-align: center; background-color: gray'></td>
             <td style='width: 15%; text-align: center; background-color: gray'></td>
             <td style='width: 15%; text-align: center; background-color: white'>Totaal te betalen</td>
-            <td style='width: 15%; background-color: white'>&euro;$totaal_btw</td>
+            <td style='width: 15%; background-color: white'>[WIP] &euro;$totaal_btw</td>
         </tr>
     </table>
     </div>
@@ -129,10 +148,10 @@ WHERE reservering.klant_id = $klant_id";
 </html>
 ";
 
-    // Send email to the user
-    if (mail($email_to, $subject, $message, $headers)) {
-        echo "Vacature is gestuurd naar uw email";
-    } else {
-        "Not sent";
+        // Send email to the user
+        if (mail($email_to, $subject, $message, $headers)) {
+            echo "Factuur is gestuurd naar uw email";
+        } else {
+            "Not sent";
     }
 ?>

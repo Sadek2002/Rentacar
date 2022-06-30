@@ -1,15 +1,15 @@
 <?php
 session_start();
 
-// DB connection
-$mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
+// Connection creation
+include_once "../includes/db_connection.php";
 
 // Get ID
 $id = $_SESSION['id'];
 
 // Select Data
 $query = "SELECT foto FROM auto WHERE kenteken = '$id'";
-$result = mysqli_query($mysqli, $query) or die("Error with query");
+$result = mysqli_query($conn, $query) or die("Error with query");
 
 while ($row = mysqli_fetch_array($result)) {
     $foto = $row['foto'];

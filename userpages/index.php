@@ -8,10 +8,6 @@
     <link rel="stylesheet" href="../adminpages/style.css">
     <title>Main Page</title>
 </head>
-<?php
-// Connection creation
-$mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
-?>
 <header>
     <div class="headerWrapper">
         <img class="logo" src="../image/logo.png">
@@ -23,7 +19,7 @@ $mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecti
     <div class="navBar">
         <ul class="dropDown">
             <li><a class="active" href="index.php">Auto huren</a></li>
-            <li><a href="">Auto aanbod</a></li>
+            <li><a href="autoAanbod.php">Auto aanbod</a></li>
             <li><a href="">Contact</a></li>
             <li><a href="">Veel gestelde vragen</a></li>
         </ul>
@@ -44,9 +40,7 @@ $mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecti
 
             <div class="fullWidthBox">
                 <label for="addKenteken">Ophaal locatie:</label><br>
-                <select id="selectionType">
-                    <option>Almere</option>
-                </select>
+                <p class="Ophaallocatie">Almere</p>
             </div>
 
             <br>

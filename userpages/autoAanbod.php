@@ -1,3 +1,12 @@
+<?php
+// Connection creation
+include_once "../includes/db_connection.php";
+
+// Get cars
+$query = "SELECT * FROM auto INNER JOIN merktype ON auto.merktype_id = merktype.id";
+$result = mysqli_query($conn, $query) or die("Error with query");
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,27 +16,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../adminpages/style.css">
     <title>Car Selection</title>
-</head>
-<?php
-session_start();
-
-$ophaaldatum = $_SESSION['ophaaldatum'];
-$start_date = strtotime($ophaaldatum);
-$retourdatum = $_SESSION['retourdatum'];
-$end_date = strtotime($retourdatum);
-
-//echo $start_date;
-//echo $end_date;
-
-// Connection creation
-$mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
-
-// Get car id
-$query = "SELECT * FROM auto INNER JOIN merktype ON merktype_id = id";
-$query2 = "";
-
-$result = mysqli_query($mysqli, $query) or die("Error with query");
-?>
 <header>
     <div class="headerWrapper">
         <img class="logo" src="../image/logo.png">
@@ -38,8 +26,8 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
     <!--Navigation bar-->
     <div class="navBar">
         <ul class="dropDown">
-            <li><a class="active" href="index.php">Auto huren</a></li>
-            <li><a href="">Auto aanbod</a></li>
+            <li><a href="index.php">Auto huren</a></li>
+            <li><a class="active" href="">Auto aanbod</a></li>
             <li><a href="">Contact</a></li>
             <li><a href="">Veel gestelde vragen</a></li>
         </ul>
@@ -47,7 +35,6 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
 
     <?php
     while ($row = mysqli_fetch_array($result)) {
-        $kenteken = $row['kenteken'];
         $foto = $row['foto'];
         $brandstof = $row['brandstof'];
         $kleur = $row['kleur'];
@@ -55,9 +42,7 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
         $type = $row['type'];
         $prijs = $row['prijs'];
 
-        $_SESSION['kenteken'] = $kenteken;
-
-            echo '
+        echo '
             <div class="showCar">
             <div class="imageWrapper">
             <img class= "imageCar" src="' . $foto . '"/>
@@ -66,17 +51,13 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
             <p class="imageText">Brandstof: ' . $brandstof . '</p>
             <p class="imageText">Kleur: ' . $kleur . '</p>
             <p class="imageText">Prijs per dag: €' . $prijs . '</p>
-            
-            <a class="selectButton" href="uploadKenteken.php?id=' . $kenteken . '">Select</a>
             ' .
-                '
+            '
             </div>
         ';
     }
-        ?>
+    ?>
 
 </header>
-<body>
-
-</body>
 </html>
+

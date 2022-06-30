@@ -9,12 +9,15 @@
     <title>Car Selection</title>
 </head>
 <?php
-// Connection creation
-$mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
+session_start();
 
-// Select Data
+// Connection creation
+include_once "../includes/db_connection.php";
+
+// Get car id
 $query = "SELECT * FROM auto INNER JOIN merktype ON merktype_id = id";
-$result = mysqli_query($mysqli, $query) or die("Error with query");
+
+$result = mysqli_query($conn, $query) or die("Error with query");
 ?>
 <header>
     <div class="headerWrapper">
@@ -43,6 +46,8 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
         $type = $row['type'];
         $prijs = $row['prijs'];
 
+        $_SESSION['kenteken'] = $kenteken;
+
         echo '
             <div class="showCar">
             <div class="imageWrapper">
@@ -53,13 +58,13 @@ $result = mysqli_query($mysqli, $query) or die("Error with query");
             <p class="imageText">Kleur: ' . $kleur . '</p>
             <p class="imageText">Prijs per dag: €' . $prijs . '</p>
             
-            <a class="selectButton" href="carRental.php?id=' .$kenteken . '">Select</a>
+            <a class="selectButton" href="uploadKenteken.php?id=' .$kenteken . '">Select</a>
             ' .
             '
             </div>
         ';
     }
-        ?>
+    ?>
 
 </header>
 <body>

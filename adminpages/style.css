@@ -389,6 +389,11 @@ a.deleteButton {
     margin-left: 30px;
 }
 
+.Ophaallocatie {
+    padding: 10px 0 10px 0;
+    margin-bottom: 10px;
+}
+
 /*Rental CSS*/
 .whiteBoxImage {
     display: inline-block;

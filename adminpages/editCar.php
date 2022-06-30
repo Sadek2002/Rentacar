@@ -12,8 +12,8 @@
 <?php
 session_start();
 
-// DB connection
-$mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
+// Connection creation
+include_once "../includes/db_connection.php";
 
 // Get ID
 $id = $_GET['id'];
@@ -24,10 +24,10 @@ $query = "SELECT a.*, mt.* FROM auto AS a
          INNER JOIN merktype as mt
          ON a.merktype_id = mt.id 
          WHERE kenteken = '$id'";
-$result = mysqli_query($mysqli, $query) or die("Error with query");
+$result = mysqli_query($conn, $query) or die("Error with query");
 
 $query2 = "SELECT * FROM merktype";
-$result2 = mysqli_query($mysqli, $query2) or die("Error with query");
+$result2 = mysqli_query($conn, $query2) or die("Error with query");
 
 
 ?>

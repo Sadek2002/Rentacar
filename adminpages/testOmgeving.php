@@ -9,13 +9,14 @@
     <title>Auto toevoegen</title>
 </head>
 <?php
-$mysqli = new mysqli('localhost', 'root', '', 'rentacar') or die('Error connecting');
+// Connection creation
+include_once "../includes/db_connection.php";
 
 // Select Data
 $query = "SELECT k.kleur,mt.merk,type,prijs FROM kleur k, merktype mt WHERE k.id = mt.id";
 
 $merkQuery = "SELECT merk FROM merktype";
-$result = mysqli_query($mysqli, $query) or die("Error with query");
+$result = mysqli_query($conn, $query) or die("Error with query");
 ?>
 
 <body>
