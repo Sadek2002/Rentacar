@@ -15,7 +15,6 @@ session_start();
 include_once "../includes/db_connection.php";
 
 $reservation_id = $_SESSION['name'];
-echo $reservation_id;
 
 $kenteken = $_SESSION['kenteken'];
 
@@ -44,8 +43,8 @@ $result = mysqli_query($conn, $query) or die("Error with query");
         <ul class="dropDown">
             <li><a class="active" href="index.php">Auto huren</a></li>
             <li><a href="autoAanbod.php">Auto aanbod</a></li>
-            <li><a href="">Contact</a></li>
-            <li><a href="">Veel gestelde vragen</a></li>
+            <li><a href="contact.php">Contact</a></li>
+            <li><a href="faq.php">Veel gestelde vragen</a></li>
         </ul>
     </div>
 
@@ -69,9 +68,11 @@ $result = mysqli_query($conn, $query) or die("Error with query");
 
         $interval = $datetime1->diff($datetime2);
 
+        $totaldays = $interval->days + 1;
+
         // Get price
-        $totaal = $prijs * $interval->days;
-        $btw = $prijs * $interval->days / 100 * 21;
+        $totaal = $prijs * $totaldays;
+        $btw = $prijs * $totaldays / 100 * 21;
         $totaal_btw = $totaal + $btw;
 
         echo '
@@ -87,7 +88,7 @@ $result = mysqli_query($conn, $query) or die("Error with query");
                 <p class="carData">Ophaaldatum: '. $ophaaldatum .' Ophaaltijd: '. $ophaaltijd .'</p><br>
                 <p class="carData">Retourdatum: ' . $retourdatum .' Retourtijd: '. $retourtijd .'</p><br><br>
                 <p class="carData"><b>Totale bedrag:</b></p><br>
-                <p class="carData">Totale huur periode: '. $interval->days .'</p><br>
+                <p class="carData">Totale huur periode: '. $totaldays .'</p><br>
                 <p class="carData" style="padding-bottom: 10px">Bedrag inclusief btw: €'. $totaal_btw .'</p><br>
             </div>
             
@@ -155,6 +156,37 @@ $result = mysqli_query($conn, $query) or die("Error with query");
         ';
     }
     ?>
+
+    <footer>
+        <table class="footerTable">
+            <tr>
+                <th class="footerTableHeader">Rentacar</th>
+                <th class="footerTableHeader">Contact</th>
+            </tr>
+
+            <tr>
+                <td class="footerTableData">Huur leuke en goedgekeurde auto's</td>
+                <td class="footerTableData">Tel: 06-19195844</td>
+                <td class="footerTableData"><a class="footerLinks" href="">Algemene voorwaarden</a></td>
+            </tr>
+
+            <tr>
+                <td class="footerTableData"></td>
+                <td class="footerTableData"><a class="footerLinks" href="">info@rentacar.nl</a></td>
+                <td class="footerTableData"><a class="footerLinks" href="">Privacyverklaring</a></td>
+            </tr>
+
+            <tr>
+                <td class="footerTableData"></td>
+                <td class="footerTableData">Janpeterstraat 21</td>
+            </tr>
+
+            <tr>
+                <td class="footerTableData"></td>
+                <td class="footerTableData">2339HK, Almere</td>
+            </tr>
+        </table>
+    </footer>
 </header>
 </body>
 </html>

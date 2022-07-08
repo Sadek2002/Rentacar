@@ -11,7 +11,7 @@
 
     // Get data
     $query = "
-SELECT * FROM reservering 
+SELECT * FROM reservering
 INNER JOIN auto 
 	ON reservering.auto_id = auto.kenteken 
 INNER JOIN merktype 
@@ -29,7 +29,7 @@ WHERE klant.email = '$email'";
     $subject = "Betreft: Factuur Rent a Car";
 
     // Create the email headers
-    $headers = "From: Rent a Car <salmousawi@roc-dev.com>\r\n";
+    $headers = "From: Rent a Car\r\n";
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
@@ -47,22 +47,16 @@ WHERE klant.email = '$email'";
         <p>Telefoon: (036)-39224932</p>
         
         <br>
+        ";
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $reservering_id = $row['reservering_id'];
+
+            $message .=
+                "
         
         <p>Datum: $date_now</p>
-        <p>Factuurnummer: #</p>
-        
-        <br>
-        
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
-        
-        <br>
-        
-        <h1>Reserveringen</h1>
-
-    <table style='background: gray; border: 1px black solid; width: 100%;'>
+        <p>Factuurnummer: #$klant_id'</p>
         <tr>
             <th style='height: 40px; color: white'>Kenteken</th>
             <th style='height: 40px; color: white'>Merk</th>
@@ -73,9 +67,10 @@ WHERE klant.email = '$email'";
             <th style='height: 40px; color: white'>Totale dagen</th>
             <th style='height: 40px; color: white'>Totaal</th>
         </tr>
-        ";
+        ";}
 
 // Input data
+        $totaalprijs = 0;
         while ($row = mysqli_fetch_assoc($result)) {
         $kenteken = $row['kenteken'];
         $brandstof = $row['brandstof'];
@@ -86,7 +81,6 @@ WHERE klant.email = '$email'";
         $ophaaltijd = $row['ophaaltijd'];
         $retourdatum = $row['retourdatum'];
         $retourtijd = $row['retourtijd'];
-        $reservering_id = $row['reservering_id'];
         $getEmail = $row['email'];
 
         // Get total days
@@ -101,7 +95,8 @@ WHERE klant.email = '$email'";
 
         // Get price
         $totaal = $prijs * $totaldays;
-        $btw = $prijs * $totaldays / 100 * 21;
+
+        $totaalprijs = $totaalprijs + $totaal;
 
         $message .=
             "
@@ -117,8 +112,8 @@ WHERE klant.email = '$email'";
         </tr>
         ";}
 
-        $btw = $prijs * $totaldays / 100 * 21;
-        $totaal_btw = $prijs + $btw;
+        $btw = $totaalprijs / 100 * 21;
+        $totaal_btw = $totaalprijs + $btw;
 
 $message .=
     "
@@ -129,8 +124,18 @@ $message .=
             <td style='width: 15%; text-align: center; background-color: gray'></td>
             <td style='width: 15%; text-align: center; background-color: gray'></td>
             <td style='width: 15%; text-align: center; background-color: gray'></td>
+            <td style='width: 15%; text-align: center; background-color: white'>Totaal exclusief BTW</td>
+            <td style='width: 15%; background-color: white'>&euro;$totaalprijs</td>
+        </tr>
+        <tr>
+            <td style='width: 15%; text-align: center; background-color: gray'></td>
+            <td style='width: 15%; text-align: center; background-color: gray'></td>
+            <td style='width: 15%; text-align: center; background-color: gray'></td>
+            <td style='width: 15%; text-align: center; background-color: gray'></td>
+            <td style='width: 15%; text-align: center; background-color: gray'></td>
+            <td style='width: 15%; text-align: center; background-color: gray'></td>
             <td style='width: 15%; text-align: center; background-color: white'>BTW</td>
-            <td style='width: 15%; background-color: white'>[WIP] &euro;$btw</td>
+            <td style='width: 15%; background-color: white'>&euro;$btw</td>
         </tr>
          <tr>
             <td style='width: 15%; text-align: center; background-color: gray'></td>
@@ -139,8 +144,8 @@ $message .=
             <td style='width: 15%; text-align: center; background-color: gray'></td>
             <td style='width: 15%; text-align: center; background-color: gray'></td>
             <td style='width: 15%; text-align: center; background-color: gray'></td>
-            <td style='width: 15%; text-align: center; background-color: white'>Totaal te betalen</td>
-            <td style='width: 15%; background-color: white'>[WIP] &euro;$totaal_btw</td>
+            <td style='width: 15%; text-align: center; background-color: white'>Totaal inclusief BTW</td>
+            <td style='width: 15%; background-color: white'>&euro;$totaal_btw</td>
         </tr>
     </table>
     </div>

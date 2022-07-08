@@ -4,7 +4,8 @@ session_start();
 // Connection creation
 include_once "../includes/db_connection.php";
 
-$id = $_GET['id'];
+$email = $_GET['email'];
+$factuurNr = $_GET['id'];
 
 $query = "SELECT * FROM reservering 
 INNER JOIN auto 
@@ -13,7 +14,8 @@ INNER JOIN merktype
 	ON auto.merktype_id = merktype.id  
 INNER JOIN klant 
 	ON klant.klant_id = reservering.klant_id
-WHERE klant.email = '$id'";
+WHERE klant.email = '$email'
+ORDER BY reservering_id DESC";
 
 $result = mysqli_query($conn, $query) or die("Error with query");
 
@@ -28,10 +30,12 @@ echo '
         <p>Telefoon: (036)-39224932</p>
 
         <br>
-
+        
         <p>Datum: '. $date_now .'</p>
-        <p>Factuurnummer: #</p>
+        ';
 
+echo '
+        <p>Factuurnummer: #'. $factuurNr .'</p>
         <br>
 
         <h1>Reserveringen</h1>
@@ -51,8 +55,8 @@ echo '
     ';
 
 // Get data
-while ($row = mysqli_fetch_array($result)) {
-    $reservering_id = $row['reservering_id'];
+$totaalprijs = 0;
+while ($row = mysqli_fetch_assoc($result)) {
     $foto = $row['foto'];
     $kenteken = $row['kenteken'];
     $brandstof = $row['brandstof'];
@@ -66,7 +70,6 @@ while ($row = mysqli_fetch_array($result)) {
     $ophaaltijd = $row['ophaaltijd'];
     $retourtijd = $row['retourtijd'];
 
-
     // Get day difference
     $datetime1 = date_create($ophaaldatum);
     $datetime2 = date_create($retourdatum);
@@ -74,10 +77,10 @@ while ($row = mysqli_fetch_array($result)) {
     $interval = $datetime1->diff($datetime2);
     $totaldays = $interval->days + 1;
 
-// Get total price with tax
-
     //totaal 1 auto
     $totaal = $prijs * $totaldays;
+
+    $totaalprijs = $totaalprijs + $totaal;
 
     echo '
         <tr>
@@ -92,10 +95,20 @@ while ($row = mysqli_fetch_array($result)) {
         </tr>
     ';}
 
-    $btw = $prijs * $totaldays / 100 * 21;
-    $totaal_btw = $prijs + $btw;
+    $btw = $totaalprijs / 100 * 21;
+    $totaal_btw = $totaalprijs + $btw;
 
 echo ' 
+          <tr>
+            <td style="width: 15%; text-align: center; background-color: gray"></td>
+            <td style="width: 15%; text-align: center; background-color: gray"></td>
+            <td style="width: 15%; text-align: center; background-color: gray"></td>
+            <td style="width: 15%; text-align: center; background-color: gray"></td>
+            <td style="width: 15%; text-align: center; background-color: gray"></td>
+            <td style="width: 15%; text-align: center; background-color: gray"></td>
+            <td style="width: 15%; text-align: center; background-color: white">Totaal exclusief BTW</td>
+            <td style="width: 15%; background-color: white">&euro;'. $totaalprijs .'</td>
+        </tr>
          <tr>
             <td style="width: 15%; text-align: center; background-color: gray"></td>
             <td style="width: 15%; text-align: center; background-color: gray"></td>
@@ -113,7 +126,7 @@ echo '
             <td style="width: 15%; text-align: center; background-color: gray"></td>
             <td style="width: 15%; text-align: center; background-color: gray"></td>
             <td style="width: 15%; text-align: center; background-color: gray"></td>
-            <td style="width: 15%; text-align: center; background-color: white">Totaal te betalen</td>
+            <td style="width: 15%; text-align: center; background-color: white">Totaal inclusief BTW</td>
             <td style="width: 15%; background-color: white">&euro;'. $totaal_btw .'</td>
         </tr>
         </table>

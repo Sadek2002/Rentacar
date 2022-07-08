@@ -44,9 +44,7 @@ $result2 = mysqli_query($conn, $query2) or die("Error with query");
         <ul class="dropDown">
             <li><a class="active" href="index.php">Home</a></li>
             <li><a href="autotoevoegen.php">Auto toevoegen</a></li>
-            <li><a href="merk.php">Merk toevoegen</a></li>
-            <li><a href="kleur.php">Kleur toevoegen</a></li>
-            <li><a href="brandstof.php">Brandstof toevoegen</a></li>
+            <li><a href="merkTypePrijs.php">Merk toevoegen</a></li>
             <li><a href="reserveringen.php">Reserveringen</a></li>
         </ul>
     </div>

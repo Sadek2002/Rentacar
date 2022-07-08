@@ -87,7 +87,7 @@ $result = mysqli_query($conn, $query) or die("Error with query");
         <td>' . $merk . '</td>
         <td>' . $types . '</td>
         <td>' . $prijs . '</td>
-        <td><a class="editButton" href="merkTypePrijs.php?id=' . $id . '">Edit</a></td>
+        <td><a class="editButton" href="editMerkTypePrijs.php?id=' . $id . '">Edit</a></td>
         <td><a class="deleteButton" href="deleteMerkTypePrijs.php?id=' . $id . '">Delete</a></td>
     </tr>';
     }

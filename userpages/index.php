@@ -20,8 +20,8 @@
         <ul class="dropDown">
             <li><a class="active" href="index.php">Auto huren</a></li>
             <li><a href="autoAanbod.php">Auto aanbod</a></li>
-            <li><a href="">Contact</a></li>
-            <li><a href="">Veel gestelde vragen</a></li>
+            <li><a href="contact.php">Contact</a></li>
+            <li><a href="faq.php">Veel gestelde vragen</a></li>
         </ul>
     </div>
 </header>
@@ -70,5 +70,36 @@
             <button class="addButton">Toevoegen</button>
         </form>
     </div>
+
+<footer>
+    <table class="footerTable">
+        <tr>
+            <th class="footerTableHeader">Rentacar</th>
+            <th class="footerTableHeader">Contact</th>
+        </tr>
+
+        <tr>
+            <td class="footerTableData">Huur leuke en goedgekeurde auto's</td>
+            <td class="footerTableData">Tel: 06-19195844</td>
+            <td class="footerTableData"><a class="footerLinks" href="">Algemene voorwaarden</a></td>
+        </tr>
+
+        <tr>
+            <td class="footerTableData"></td>
+            <td class="footerTableData"><a class="footerLinks" href="">info@rentacar.nl</a></td>
+            <td class="footerTableData"><a class="footerLinks" href="">Privacyverklaring</a></td>
+        </tr>
+
+        <tr>
+            <td class="footerTableData"></td>
+            <td class="footerTableData">Janpeterstraat 21</td>
+        </tr>
+
+        <tr>
+            <td class="footerTableData"></td>
+            <td class="footerTableData">2339HK, Almere</td>
+        </tr>
+    </table>
+</footer>
 </body>
 </html>

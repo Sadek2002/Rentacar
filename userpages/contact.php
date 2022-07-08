@@ -1,12 +1,3 @@
-<?php
-// Connection creation
-include_once "../includes/db_connection.php";
-
-// Get cars
-$query = "SELECT * FROM auto INNER JOIN merktype ON auto.merktype_id = merktype.id";
-$result = mysqli_query($conn, $query) or die("Error with query");
-?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -15,7 +6,9 @@ $result = mysqli_query($conn, $query) or die("Error with query");
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../adminpages/style.css">
-    <title>Car Selection</title>
+    <title>Document</title>
+</head>
+<body>
 <header>
     <div class="headerWrapper">
         <img class="logo" src="../image/logo.png">
@@ -27,36 +20,32 @@ $result = mysqli_query($conn, $query) or die("Error with query");
     <div class="navBar">
         <ul class="dropDown">
             <li><a href="index.php">Auto huren</a></li>
-            <li><a class="active" href="">Auto aanbod</a></li>
-            <li><a href="contact.php">Contact</a></li>
+            <li><a href="autoAanbod.php">Auto aanbod</a></li>
+            <li><a class="active" href="contact.php">Contact</a></li>
             <li><a href="faq.php">Veel gestelde vragen</a></li>
         </ul>
     </div>
 
-    <?php
-    while ($row = mysqli_fetch_array($result)) {
-        $foto = $row['foto'];
-        $brandstof = $row['brandstof'];
-        $kleur = $row['kleur'];
-        $merk = $row['merk'];
-        $type = $row['type'];
-        $prijs = $row['prijs'];
+    <div class="whiteBox">
+        <p class="contactMainTitle">Contact</p>
 
-        echo '
-            <div class="showCar">
-            <div class="imageWrapper">
-            <img class= "imageCar" src="' . $foto . '"/>
-            </div>
-            <p class="imageTitle">' . $merk . ' ' . $type . '</p>
-            <p class="imageText">Brandstof: ' . $brandstof . '</p>
-            <p class="imageText">Kleur: ' . $kleur . '</p>
-            <p class="imageText">Prijs per dag: €' . $prijs . '</p>
-            ' .
-            '
-            </div>
-        ';
-    }
-    ?>
+        <div class="whiteBox">
+            <p class="contactTitle">Onze nummer</p>
+            <p class="contactSubtext">Telefoon. 06-19195844</p>
+        </div>
+
+        <div class="whiteBox">
+            <p class="contactTitle">Onze email</p>
+            <p class="contactSubtext"><a href="">info@rentacar.nl</a></p>
+            <p class="contactSubtext">Vergeet niet te schrijven waarom je de email schrijft. (Als het over het auto verhuur gaat, meld de factuur nummer dan)</p>
+        </div>
+
+        <div class="whiteBox" style="margin-bottom: 20px">
+            <p class="contactTitle">Ons locatie</p>
+            <p class="contactSubtext">Janpeterstraat 21</p>
+            <p class="contactSubtext">2339HK Almere</p>
+        </div>
+    </div>
 
     <footer>
         <table class="footerTable">
@@ -89,5 +78,5 @@ $result = mysqli_query($conn, $query) or die("Error with query");
         </table>
     </footer>
 </header>
+</body>
 </html>
-

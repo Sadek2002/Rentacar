@@ -34,7 +34,7 @@ $result = mysqli_query($conn, $query) or die("Error with query");
             <li><a href="reserveringen.php">Reserveringen</a></li>
         </ul>
     </div>
-
+</header>
 
     <!--Item table-->
     <table>
@@ -45,7 +45,6 @@ $result = mysqli_query($conn, $query) or die("Error with query");
             <th>Merk</th>
             <th>Type</th>
             <th>Prijs</th>
-            <th>Kleur</th>
             <th>Edit</th>
             <th>Delete</th>
             <?php
@@ -53,29 +52,26 @@ $result = mysqli_query($conn, $query) or die("Error with query");
                 $foto = $row['foto'];
                 $kenteken = $row['kenteken'];
                 $brandstof = $row['brandstof'];
-                $kleur = $row['kleur'];
                 $merk = $row['merk'];
                 $type = $row['type'];
                 $prijs = $row['prijs'];
 
                 echo '<tr>
-                <td><img class= "image" src="' . $foto . '"/></td>
-                <td>' . $kenteken . '</td>
-                <td>' . $brandstof . '</td>
-                <td>' . $merk . '</td>
-                <td>' . $type . '</td>
-                <td>' . $prijs . '</td>
-<td>' . $kleur . '</td>' .
+                <td style="width: 20%; height: 100px"><img class= "image" src="' . $foto . '"/></td>
+                <td style="width: 10%; height: auto">' . $kenteken . '</td>
+                <td style="width: 10%; height: auto">' . $brandstof . '</td>
+                <td style="width: 10%; height: auto">' . $merk . '</td>
+                <td style="width: 10%; height: auto">' . $type . '</td>
+                <td style="width: 10%; height: auto">' . $prijs . '</td>
+                ' .
                     '
-
-                <td><a class="editButton" href="editCar.php?id=' .$kenteken . '">Edit</a></td>
-                <td><a class="deleteButton" href="deleteCar.php?id=' .$kenteken. '">Delete</a></td>
+                <td style="width: 10%; height: auto"><a class="editButton" href="editCar.php?id=' .$kenteken . '">Edit</a></td>
+                <td style="width: 10%; height: auto"><a class="deleteButton" href="deleteCar.php?id=' .$kenteken. '">Delete</a></td>
                   </tr>';
             }
             ?>
         </tr>
     </table>
     </div>
-</header>
 </body>
 </html>

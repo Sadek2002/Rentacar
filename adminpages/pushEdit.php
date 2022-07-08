@@ -24,7 +24,7 @@ if (isset($_POST['submit'])) {
     $statement->execute() or die('Error inserting image in database (kenteken might be in use)');
     $statement->close();
 
-    header('Location: index.php');
+    header('Location: pushEditMerkTypePrijs.php');
 }
 ?>
 
